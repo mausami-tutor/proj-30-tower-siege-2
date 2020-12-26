@@ -17,9 +17,15 @@ function setup() {
  floor= new Ground(width/2, height-10, width, 20)
  base1= new Ground(500, 450, 400, 10)
  base2=new Ground(800, 250, 250, 10)
- polygon=Bodies.circle(100,400, 20)
- World.add(world, polygon)
- slingshot1= new SlingShot(polygon, {x:100,y:400})
+ var options={
+   restitution:0.4,
+   density:1.2,
+   friction:1
+ }
+ polygon1=Bodies.circle(150,400, 20,options)
+ World.add(world, polygon1)
+ 
+ slingshot1= new SlingShot(polygon1, {x:150,y:400})
 
  //level1
  color1=[getr(),getg(),getb()]
@@ -68,6 +74,8 @@ function setup() {
  //level3
  color7= [getr(), getg(), getb()]
  box25=new Box(800, 120, 50,50)
+
+ Engine.run(engine)
 }
 
 function draw() {
@@ -125,7 +133,7 @@ fill(color7[0],color7[1],color7[2])
 box25.display()
 
 imageMode(CENTER)
-image(polygonimage, polygon.position.x,polygon.position.y,60,60)
+image(polygonimage, polygon1.position.x,polygon1.position.y,60,60)
 
 slingshot1.display()
 }
@@ -142,10 +150,15 @@ function getb(){
   return x
 }
 function mouseDragged(){
-  polygon.position.x= mouseX
-  polygon.position.y= mouseY
+  polygon1.position.x= mouseX
+  polygon1.position.y= mouseY
 
 }
 function mouseReleased(){
   slingshot1.fly()
+}
+function keyPressed(){
+  if(keyCode===32){
+    slingshot1.attach(polygon1)
+  }
 }
