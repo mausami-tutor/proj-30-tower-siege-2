@@ -3,30 +3,28 @@ const World= Matter.World;
 const Bodies = Matter.Bodies;
 const Constraint = Matter.Constraint;
 
-var floor, base1, base2, polygon, slingshot1
-function preload(){
-  polygonimage=loadImage("polygon.png")
-}
+var ground1, base1, base2, polygon1, slingshot1
+
 
 function setup() {
   createCanvas(1000,600);
  // createSprite(400, 200, 50, 50);
  engine = Engine.create();
  world = engine.world;
-
- floor= new Ground(width/2, height-10, width, 20)
+ Engine.run(engine)
+ ground1= new Ground(width/2, height-10, width, 20)
  base1= new Ground(500, 450, 400, 10)
  base2=new Ground(800, 250, 250, 10)
- var options={
-   restitution:0.4,
-   density:1.2,
-   friction:1
- }
- polygon1=Bodies.circle(150,400, 20,options)
- World.add(world, polygon1)
  
- slingshot1= new SlingShot(polygon1, {x:150,y:400})
-
+ /*var options={
+   density:1.2
+ }
+ polygon1=Bodies.circle(120,400, 30,options)
+ World.add(world, polygon1)*/
+ hitter=new Projectile(120,400,40)
+ console.log(hitter)
+ slingshot1= new SlingShot(hitter.body, {x:120,y:400})
+ 
  //level1
  color1=[getr(),getg(),getb()]
  box1= new Box(322,420, 50,50)
@@ -75,13 +73,13 @@ function setup() {
  color7= [getr(), getg(), getb()]
  box25=new Box(800, 120, 50,50)
 
- Engine.run(engine)
+ 
 }
 
 function draw() {
   background(255,255,255);  
-  text(mouseX+','+ mouseY, mouseX, mouseY)
-  floor.display()
+  //text(mouseX+','+ mouseY, mouseX, mouseY)
+  ground1.display()
   base1.display()
   base2.display()
  
@@ -94,7 +92,6 @@ function draw() {
   box5.display()
   box6.display()
   box7.display()
-
   //level2
   fill(color2[0],color2[1],color2[2])
   box8.display()
@@ -102,40 +99,37 @@ function draw() {
   box10.display()
   box11.display()
   box12.display()
- 
-  //level3
+   //level3
   fill(color3[0],color3[1],color3[2])
   box13.display()
   box14.display()
   box15.display()
-  
-
   //level4
   fill(color4[0],color4[1],color4[2])
- box16.display()
+  box16.display()
 
- //level1
- fill(color5[0],color5[1],color5[2])
- box17.display()
- box18.display()
- box19.display()
- box20.display()
- box21.display()
+  //stand2
+  //level1
+  fill(color5[0],color5[1],color5[2])
+  box17.display()
+  box18.display()
+  box19.display()
+  box20.display()
+  box21.display()
+  //level2
+  fill(color6[0],color6[1],color6[2])
+  box22.display()
+  box23.display()
+  box24.display()
+  //level 3
+  fill(color7[0],color7[1],color7[2])
+  box25.display()
 
- //level2
- fill(color6[0],color6[1],color6[2])
-box22.display()
-box23.display()
-box24.display()
-
-//level 3
-fill(color7[0],color7[1],color7[2])
-box25.display()
-
-imageMode(CENTER)
-image(polygonimage, polygon1.position.x,polygon1.position.y,60,60)
-
-slingshot1.display()
+  fill("violet")
+  /*imageMode(CENTER)
+  image(polygonimage,polygon1.position.x,polygon1.position.y,60,60)*/
+ hitter.display()
+  slingshot1.display()
 }
 function getr(){
     var x=Math.round(random(0,255))
@@ -150,8 +144,7 @@ function getb(){
   return x
 }
 function mouseDragged(){
-  polygon1.position.x= mouseX
-  polygon1.position.y= mouseY
+ Matter.Body.setPosition(hitter.body, {x:mouseX, y:mouseY})
 
 }
 function mouseReleased(){
@@ -159,6 +152,7 @@ function mouseReleased(){
 }
 function keyPressed(){
   if(keyCode===32){
-    slingshot1.attach(polygon1)
+    Matter.Body.setPosition(hitter.body, {x:150, y:400})
+    slingshot1.attach(hitter.body)
   }
 }
