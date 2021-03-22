@@ -7,7 +7,7 @@ class Projectile{
         }
         this.body=Bodies.circle(x,y,radius,options)
         World.add(world, this.body)
-        this.image=loadImage("polygon.png")
+        this.image=loadImage("poly1.png")
         this.radius=radius
     }
     display(){
